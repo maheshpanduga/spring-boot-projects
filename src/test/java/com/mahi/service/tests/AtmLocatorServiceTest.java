@@ -11,11 +11,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RequestCallback;
+import org.springframework.web.client.ResponseExtractor;
 import org.springframework.web.client.RestTemplate;
 
 import com.mahi.model.Address;
@@ -41,22 +39,23 @@ public class AtmLocatorServiceTest {
 		atmsList.add(atm);
 		atmsList.add(atm2);
 		
-		Mockito.when(restTemplate.exchange(Mockito.anyString()
+		Mockito.when(restTemplate.execute(Mockito.anyString()
 		                , Mockito.eq(HttpMethod.GET)
-		                , Mockito.nullable(HttpEntity.class)
-		                , Mockito.<ParameterizedTypeReference<List<Atm>>>any())
-		   ).thenReturn(new ResponseEntity<>(atmsList, HttpStatus.OK));
+		                , Mockito.nullable(RequestCallback.class)
+		                , Mockito.<ResponseExtractor<List<Atm>>> any()
+		                )
+		   ).thenReturn(atmsList);
     }
 
 	
 	@Test
-	public void testGetAllAtms() {
+	public void testGetAllAtms() throws Exception {
 		List<Atm> allAtms = atmLocatorService.getAllAtms();
 		assertEquals(2, allAtms.size());
 	}
 	
 	@Test
-	public void testGetAtmsByCity() {
+	public void testGetAtmsByCity() throws Exception {
 		List<Atm> allAtms = atmLocatorService.getAtmsByCity("Ysselsteyn");
 		assertEquals(1, allAtms.size());
 	}

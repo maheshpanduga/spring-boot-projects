@@ -23,13 +23,13 @@ public class AtmController {
 	}
 
 	@GetMapping("/")
-	public List<Atm> getAllAtms() {
+	public List<Atm> getAllAtms() throws Exception {
 		
 		return atmLocatorService.getAllAtms();
 	}
 	
 	@GetMapping("/city/{cityName}")
-	public List<Atm> getAtmsByCity(@PathVariable String cityName) {
+	public List<Atm> getAtmsByCity(@PathVariable String cityName) throws Exception {
 		
 		return atmLocatorService.getAtmsByCity(cityName);
 	}
